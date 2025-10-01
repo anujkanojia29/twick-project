@@ -2,10 +2,6 @@
   "name": "twick-project",
   "version": "0.0.1",
   "type": "module",
-  "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
-  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
