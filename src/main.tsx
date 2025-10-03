@@ -1,10 +1,14 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import { PostHogProvider } from 'posthog-js/react'
 import App from './App.tsx'
+import './index.css'
+
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <PostHogProvider apiKey={process.env.VITE_PUBLIC_POSTHOG_KEY || ''}>
+      <App />
+    </PostHogProvider>
   </StrictMode>,
-)
+);
