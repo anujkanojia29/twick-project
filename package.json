@@ -12,12 +12,12 @@
     "access": "public"
   },
   "dependencies": {
-    "@twick/canvas": "^0.14.6",
-    "@twick/live-player": "^0.14.6",
-    "@twick/media-utils": "^0.14.6",
-    "@twick/studio": "^0.14.6",
-    "@twick/timeline": "^0.14.6",
-    "@twick/video-editor": "^0.14.6",
+    "@twick/canvas": "^0.14.7",
+    "@twick/live-player": "^0.14.7",
+    "@twick/media-utils": "^0.14.7",
+    "@twick/studio": "^0.14.7",
+    "@twick/timeline": "^0.14.7",
+    "@twick/video-editor": "^0.14.7",
     "posthog-js": "^1.270.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
