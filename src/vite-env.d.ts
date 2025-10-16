@@ -2,6 +2,7 @@
 
 interface ImportMetaEnv {
   readonly VITE_POSTHOG_KEY: string
+  readonly VITE_GOOGLE_SCRIPT_URL: string
   // more env variables...
 }
 

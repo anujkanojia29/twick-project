@@ -3,6 +3,8 @@ import { LivePlayerProvider } from '@twick/live-player';
 import { TimelineProvider, INITIAL_TIMELINE_DATA } from '@twick/timeline';
 import TwickStudio from '@twick/studio';
 import "@twick/studio/dist/studio.css";
+import Feedback from './Feedback';
+import { submitFeedback } from './helpers/feedback.util';
 
 // Minimum screen width for desktop (in pixels)
 const MIN_DESKTOP_WIDTH = 1024;
@@ -11,6 +13,7 @@ const MIN_DESKTOP_HEIGHT = 600;
 function App() {
   const [isDesktop, setIsDesktop] = useState(true);
   const [screenSize, setScreenSize] = useState({ width: 0, height: 0 });
+  const [showFeedback, setShowFeedback] = useState(false);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -28,6 +31,14 @@ function App() {
 
     // Cleanup
     return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
+
+  // Auto open feedback after 20 seconds on load if it hasn't been opened yet
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setShowFeedback((prev) => prev || true);
+    }, 20000);
+    return () => window.clearTimeout(timer);
   }, []);
 
   if (!isDesktop) {
@@ -89,6 +100,61 @@ function App() {
             height: 1280,
           }}
           }/>
+        
+        {/* Feedback overlay button */}
+        <button
+          onClick={() => setShowFeedback(true)}
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px',
+            width: '60px',
+            height: '60px',
+            borderRadius: '50%',
+            background: '#4f46e5',
+            color: 'white',
+            border: 'none',
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(79, 70, 229, 0.4)',
+            fontSize: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            transition: 'all 0.2s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.1)';
+            e.currentTarget.style.boxShadow = '0 6px 16px rgba(79, 70, 229, 0.6)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.boxShadow = '0 4px 12px rgba(79, 70, 229, 0.4)';
+          }}
+          aria-label="Open feedback form"
+        >
+          💬
+        </button>
+
+        <Feedback
+          isOpen={showFeedback}
+          onClose={() => setShowFeedback(false)}
+          onSubmit={async (feedbackData) => {
+            try {
+              const result = await submitFeedback(feedbackData);
+              if (result.status === 'success') {
+                alert('Thank you for your feedback!');
+                setShowFeedback(false);
+              } else {
+                alert('Failed to submit feedback. Please try again.');
+                console.error('Feedback submission error:', result.error);
+              }
+            } catch (error) {
+              alert('Failed to submit feedback. Please try again.');
+              console.error('Feedback submission error:', error);
+            }
+          }}
+        />
       </TimelineProvider>
     </LivePlayerProvider>
   );
